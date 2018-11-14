@@ -85,7 +85,7 @@ static void update(void) {
 	time = ((float)milliseconds / 400.0f) * (isAnimating ? 1.0f : 0.0f);
 
     // rotate the entire model, to that we can examine it
-    //yRotation += yRotationSpeed;
+    yRotation += yRotationSpeed*5;
 
     // update the bones
     if (isAnimating && ((milliseconds - lastFrameMillis) > frame_delay)) {
@@ -120,11 +120,17 @@ static void render(void) {
 
   // Reminder:  Use this order for transforms:  scale, rotation, translation
 
-  glm::mat4 torso, upperRLeg, lowerRLeg, upperLLeg, lowerLLeg,closeRArm, farRArm, closeLArm, farLArm;
+  glm::mat4 torso, upperRLeg, lowerRLeg, upperLLeg, lowerLLeg,closeRArm, farRArm, closeLArm, farLArm, head, Lfoot, Rfoot;
 
   torso = baseMatrix;
   torso = glm::translate(torso, glm::vec3(0.0,5.0f, 0.0f)* (sin(time*2)/4));
-  drawCube(glm::scale(torso, glm::vec3(3.0f, 3.0f, 1.0f)), red);
+  drawCube(glm::scale(torso, glm::vec3(2.7f, 3.0f, 1.0f)), red);
+  
+
+  //head
+  head = torso;
+  head = glm::translate(head, glm::vec3(0.0f, 4.8f, 0.0f));
+  drawCube(glm::scale(head, glm::vec3(2.0,1.5f, 1.0f)), green);
 
   //Right Leg
   upperRLeg = torso;//no scal from torso here
@@ -141,6 +147,13 @@ static void render(void) {
   lowerRLeg = glm::translate(lowerRLeg, glm::vec3(0.0f, -2.0f, 0.0f));
   drawCube(glm::scale(lowerRLeg, glm::vec3(0.8f, 2.0f, 0.8f)), green);
 
+  Rfoot = lowerRLeg;
+  Rfoot = glm::translate(Rfoot, glm::vec3(0.0f, -1.8f, 0.0f));
+  Rfoot = glm::rotate(Rfoot, glm::radians(-18.0f) * sin(time), glm::vec3(1.0f, 0.0f, 0.0f));
+  drawCube(glm::scale(Rfoot, glm::vec3(0.60f)), yellow);
+  Rfoot = glm::translate(Rfoot, glm::vec3(0.0f, -0.5f, -0.5f));
+  drawCube(glm::scale(Rfoot, glm::vec3(0.9f, 0.3f, 1.3f)), red);
+
   //LeftLeg
   upperLLeg = torso;//no scal from torso here
   upperLLeg = glm::translate(upperLLeg, glm::vec3(-2.0f, -4.0f, 0.0f));//the Pivot
@@ -156,6 +169,13 @@ static void render(void) {
   lowerLLeg = glm::translate(lowerLLeg, glm::vec3(0.0f, -2.0f, 0.0f));
   drawCube(glm::scale(lowerLLeg, glm::vec3(0.8f, 2.0f, 0.8f)), green);
 
+  Lfoot = lowerLLeg;
+  Lfoot = glm::translate(Lfoot, glm::vec3(0.0f, -1.8f, 0.0f));
+  Lfoot = glm::rotate(Lfoot, glm::radians(18.0f) * sin(time), glm::vec3(1.0f, 0.0f, 0.0f));
+  drawCube(glm::scale(Lfoot, glm::vec3(0.60f)), yellow);
+  Lfoot = glm::translate(Lfoot, glm::vec3(0.0f, -0.5f, -0.5f));
+  drawCube(glm::scale(Lfoot, glm::vec3(0.9f, 0.3f, 1.3f)), red);
+
 
   //Right Arm
 
@@ -165,7 +185,7 @@ static void render(void) {
   closeRArm = glm::rotate(closeRArm, glm::radians(-30.0f) * sin(time), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(closeRArm, glm::vec3(0.95f)), yellow);
   closeRArm = glm::translate(closeRArm, glm::vec3(0.0, -1.5, 0.0f));
-  drawCube(glm::scale(closeRArm, glm::vec3(1.0, 2.0f, 1.0f)), blue);
+  drawCube(glm::scale(closeRArm, glm::vec3(1.0, 1.7f, 1.0f)), blue);
 
 
   farRArm = closeRArm;
@@ -183,7 +203,7 @@ static void render(void) {
   closeLArm = glm::rotate(closeLArm, glm::radians(30.0f) * sin(time), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(closeLArm, glm::vec3(0.95f)), yellow);
   closeLArm = glm::translate(closeLArm, glm::vec3(0.0, -1.5, 0.0f));
-  drawCube(glm::scale(closeLArm, glm::vec3(1.0, 2.0f, 1.0f)), blue);
+  drawCube(glm::scale(closeLArm, glm::vec3(1.0, 1.7f, 1.0f)), blue);
 
 
   farLArm = closeLArm;
