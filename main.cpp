@@ -122,7 +122,8 @@ static void render(void) {
 
   // Reminder:  Use this order for transforms:  scale, rotation, translation
 
-  glm::mat4 torso, upperRLeg, lowerRLeg, upperLLeg, lowerLLeg, leftArm, rightArm, head, closeLArm, closeRArm, farRArm, farLArm;
+  glm::mat4 torso, upperRLeg, lowerRLeg, upperLLeg, lowerLLeg, leftArm,
+            rightArm, head, closeLArm, closeRArm, farRArm, farLArm;
 
   torso = baseMatrix;
   torso = glm::translate(torso, glm::vec3(0.0f, 4.0f * sin(times) * 0.25, 0.0f));
@@ -163,14 +164,14 @@ static void render(void) {
   //Right Brachium
   closeRArm = torso;//no scal from torso here
   closeRArm = glm::translate(closeRArm, glm::vec3(4.0f, 1.0f, 0.0f));//the Pivot
-  closeRArm = glm::rotate(closeRArm, glm::radians(-30.0f) * sin(times), glm::vec3(1.0f, 0.0f, 0.0f));
+  closeRArm = glm::rotate(closeRArm, glm::radians(30.0f) * sin(times), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(closeRArm, glm::vec3(0.95f)), yellow);
   closeRArm = glm::translate(closeRArm, glm::vec3(0.0, -1.5, 0.0f));
   drawCube(glm::scale(closeRArm, glm::vec3(1.0, 1.7f, 1.0f)), blue);
 
   farRArm = closeRArm;
   farRArm = glm::translate(farRArm, glm::vec3(0.0, -2.0, 0.0f));
-  farRArm = glm::rotate(farRArm, glm::radians(-50.0f) * sin(times) + glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  farRArm = glm::rotate(farRArm, glm::radians(50.0f) * sin(times) + glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(farRArm, glm::vec3(0.75f)), yellow);
   farRArm = glm::translate(farRArm, glm::vec3(0.0f, -2.0f, 0.0f));
   drawCube(glm::scale(farRArm, glm::vec3(0.8f, 2.0f, 0.8f)), green);
@@ -179,7 +180,7 @@ static void render(void) {
 
   closeLArm = torso;//no scal from torso here
   closeLArm = glm::translate(closeLArm, glm::vec3(-4.0f, 1.0f, 0.0f));//the Pivot
-  closeLArm = glm::rotate(closeLArm, glm::radians(30.0f) * sin(times), glm::vec3(1.0f, 0.0f, 0.0f));
+  closeLArm = glm::rotate(closeLArm, glm::radians(-30.0f) * sin(times), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(closeLArm, glm::vec3(0.95f)), yellow);
   closeLArm = glm::translate(closeLArm, glm::vec3(0.0, -1.5, 0.0f));
   drawCube(glm::scale(closeLArm, glm::vec3(1.0, 1.7f, 1.0f)), blue);
@@ -187,7 +188,7 @@ static void render(void) {
 
   farLArm = closeLArm;
   farLArm = glm::translate(farLArm, glm::vec3(0.0, -2.0, 0.0f));
-  farLArm = glm::rotate(farLArm, glm::radians(50.0f) * sin(times) + glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  farLArm = glm::rotate(farLArm, glm::radians(-50.0f) * sin(times) + glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(farLArm, glm::vec3(0.75f)), yellow);
   farLArm = glm::translate(farLArm, glm::vec3(0.0f, -2.0f, 0.0f));
   drawCube(glm::scale(farLArm, glm::vec3(0.8f, 2.0f, 0.8f)), green);
