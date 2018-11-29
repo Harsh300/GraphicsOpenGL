@@ -123,12 +123,12 @@ static void render(void) {
   glm::vec4 white(1.0, 1.0, 1.0, 1.0);
 
   glm::mat4 baseMatrix = glm::mat4(1.0f);
-  baseMatrix = glm::rotate(baseMatrix, glm::radians(yRotation), glm::vec3(0.0f, 1.0f, 0.0f));
+  //baseMatrix = glm::rotate(baseMatrix, glm::radians(yRotation), glm::vec3(0.0f, 1.0f, 0.0f));
 
   // Reminder:  Use this order for transforms:  scale, rotation, translation
 
   glm::mat4 torso, upperRLeg, lowerRLeg, upperLLeg, lowerLLeg, leftArm,
-            rightArm, head, closeLArm, closeRArm, farRArm, farLArm, torch, torchHead;
+            rightArm, head, closeLArm, closeRArm, farRArm, farLArm, torch, torchHead, floors;
 
   torso = baseMatrix;
   torso = glm::translate(torso, glm::vec3(0.0f, 4.0f * sin(times) * 0.25, 0.0f));
@@ -212,6 +212,11 @@ static void render(void) {
   torchHead = glm::rotate(torchHead, glm::radians(0.0f) * sin(times) + glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
   torchHead = glm::translate(torchHead, glm::vec3(0.0f, 1.0f, -4.25f));
   drawCube(glm::scale(torchHead, glm::vec3(0.4f, 0.4f, 0.4f)), pink);
+
+  floors = baseMatrix;
+  floors = glm::translate(floors, glm::vec3(0.0f, -14.0f, 0.0f));
+  drawCube(glm::scale(floors, glm::vec3(200.0f, -0.80f, 200.0f)), yellow);
+
 
   viewMatrix = glm::lookAt(
       glm::vec3(eyex, eyey, eyez), // eye/camera location
