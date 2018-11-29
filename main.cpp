@@ -144,6 +144,7 @@ static void update(void) {
 }
 
 static void render(void) {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// turn on depth buffering
@@ -264,6 +265,7 @@ static void render(void) {
 	);
 	// make the draw buffer the display buffer (i.e. display what we have drawn)
 	glutSwapBuffers();
+
 }
 
 void drawCube(glm::mat4 modelMatrix, glm::vec4 colour) {
