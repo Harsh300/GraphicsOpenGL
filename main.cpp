@@ -204,14 +204,14 @@ static void render(void) {
   torch = glm::rotate(torch, glm::radians(0.0f) * sin(times) + glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
   drawCube(glm::scale(torch, glm::vec3(0.25f)), yellow);
   torch = glm::translate(torch, glm::vec3(0.0f, -1.0f, -1.25f));
-  drawCube(glm::scale(torch, glm::vec3(0.4f, 0.4f, 3.0f)), pink);
+  drawCube(glm::scale(torch, glm::vec3(0.4f, 0.4f, 3.0f)), white);
 
   //torch head
   torchHead = torch;
   torchHead = glm::translate(torchHead, glm::vec3(0.0, -1.0, 0.0f));
   torchHead = glm::rotate(torchHead, glm::radians(0.0f) * sin(times) + glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
   torchHead = glm::translate(torchHead, glm::vec3(0.0f, 1.0f, -4.25f));
-  drawCube(glm::scale(torchHead, glm::vec3(0.4f, 0.4f, 0.4f)), white);
+  drawCube(glm::scale(torchHead, glm::vec3(0.4f, 0.4f, 0.4f)), pink);
 
   viewMatrix = glm::lookAt(
       glm::vec3(eyex, eyey, eyez), // eye/camera location
