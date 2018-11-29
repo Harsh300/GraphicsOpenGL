@@ -15,6 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+
 int windowId = 0;
 
 // projection matrix - perspective projection
@@ -36,6 +37,10 @@ float times = 0;
 
 float yRotationSpeed = 0.1f;
 float yRotation = -85.0f;
+float eyex, eyey, eyez;
+
+double theta, phi;
+double r;
 
 void drawCube(glm::mat4 modelMatrix, glm::vec4 colour);
 static GLuint createShaderProgram(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
@@ -75,10 +80,8 @@ static void createGeometry(void) {
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), indexData, GL_STATIC_DRAW);
+
 }
-
-// TODO:  Add some key frame data for rotating and translating each of the body parts
-
 
 static void update(void) {
     int milliseconds = glutGet(GLUT_ELAPSED_TIME);
@@ -116,6 +119,8 @@ static void render(void) {
   glm::vec4 green(0.0, 0.8, 0.0, 1.0);
   glm::vec4 blue(0.0, 0.0, 0.8, 1.0);
   glm::vec4 yellow(1.0, 1.0,0.0,1.0);
+  glm::vec4 pink(2.0, 0.0, 3.0, 1.0);
+  glm::vec4 white(1.0, 1.0, 1.0, 1.0);
 
   glm::mat4 baseMatrix = glm::mat4(1.0f);
   baseMatrix = glm::rotate(baseMatrix, glm::radians(yRotation), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -123,7 +128,7 @@ static void render(void) {
   // Reminder:  Use this order for transforms:  scale, rotation, translation
 
   glm::mat4 torso, upperRLeg, lowerRLeg, upperLLeg, lowerLLeg, leftArm,
-            rightArm, head, closeLArm, closeRArm, farRArm, farLArm;
+            rightArm, head, closeLArm, closeRArm, farRArm, farLArm, torch, torchHead;
 
   torso = baseMatrix;
   torso = glm::translate(torso, glm::vec3(0.0f, 4.0f * sin(times) * 0.25, 0.0f));
@@ -193,6 +198,26 @@ static void render(void) {
   farLArm = glm::translate(farLArm, glm::vec3(0.0f, -2.0f, 0.0f));
   drawCube(glm::scale(farLArm, glm::vec3(0.8f, 2.0f, 0.8f)), green);
 
+  //torch
+  torch = farLArm;
+  torch = glm::translate(torch, glm::vec3(0.0, -1.0, 0.0f));
+  torch = glm::rotate(torch, glm::radians(0.0f) * sin(times) + glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  drawCube(glm::scale(torch, glm::vec3(0.25f)), yellow);
+  torch = glm::translate(torch, glm::vec3(0.0f, -1.0f, -1.25f));
+  drawCube(glm::scale(torch, glm::vec3(0.4f, 0.4f, 3.0f)), pink);
+
+  //torch head
+  torchHead = torch;
+  torchHead = glm::translate(torchHead, glm::vec3(0.0, -1.0, 0.0f));
+  torchHead = glm::rotate(torchHead, glm::radians(0.0f) * sin(times) + glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+  torchHead = glm::translate(torchHead, glm::vec3(0.0f, 1.0f, -4.25f));
+  drawCube(glm::scale(torchHead, glm::vec3(0.4f, 0.4f, 0.4f)), white);
+
+  viewMatrix = glm::lookAt(
+      glm::vec3(eyex, eyey, eyez), // eye/camera location
+      glm::vec3(0,0,0),    // where to look
+      glm::vec3(0,1,0)     // up
+  );
   // make the draw buffer the display buffer (i.e. display what we have drawn)
   glutSwapBuffers();
 }
@@ -246,7 +271,7 @@ static void keyboard(unsigned char key, int x, int y) {
         yRotationSpeed = 0.1;
       }
       std::cout << "Toggling rotation, speed: " << yRotationSpeed << std::endl;
-    } else if (key == 'a') {
+    } else if (key == 'z') {
       isAnimating = !isAnimating;
       std::cout << "Toggling animation: " << isAnimating << std::endl;
       std::cout << "Key frame: " << keyFrame << std::endl;
@@ -254,7 +279,29 @@ static void keyboard(unsigned char key, int x, int y) {
       glutDestroyWindow(windowId);
       exit(0);
     }
+    switch (key)
+    {
+	    case 'w':
+		   phi -= 0.1;
+		   break;
+	    case 's':
+		   phi += 0.1;
+		   break;
+	    case 'a':
+		   theta -= 0.1;
+		   break;
+	    case 'd':
+	     theta += 0.1;
+ 	     break;
+	}
+
+	eyex = r*sin(theta)*cos(phi);
+	eyey = r*sin(theta)*sin(phi);
+	eyez = r*cos(theta);
+
+
     std::cout << "Key pressed: " << key << std::endl;
+    std::cout << "eyex: " << eyex << "  eyey: " << eyey << "  eyez: " << eyez << std::endl;
 }
 
 int main(int argc, char** argv) {
@@ -280,12 +327,15 @@ int main(int argc, char** argv) {
     createGeometry();
     programId = createShaderProgram("shaders/vertex.glsl", "shaders/fragment.glsl");
 
+    eyex = 0.0;
+	  eyey = 0.0;
+	  eyez = 60.0;
+
+	  theta = 20.5;
+	  phi = 20.5;
+	  r = 50.0;
     // create the view matrix (position and orient the camera)
-    viewMatrix = glm::lookAt(
-        glm::vec3(0,0,25), // eye/camera location
-        glm::vec3(0,0,0),    // where to look
-        glm::vec3(0,1,0)     // up
-    );
+
 
     glutMainLoop();
 
